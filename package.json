@@ -4,12 +4,16 @@
   "description": "Kanban app using react",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "html-webpack-plugin": "^1.7.0",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^0.7.0"
   }
 }
