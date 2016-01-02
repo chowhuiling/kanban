@@ -17,6 +17,10 @@ var merge = require('webpack-merge');
 const common = {
   //entry accepts a path or an object of entries.
   entry: PATHS.app,
+  //resolve.extensions allow imports without an extension
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   output: {
     path: PATHS.build,
     filename: 'bundle.js'
@@ -44,6 +48,11 @@ const common = {
       // Include accepts either a path or an array of paths.
       // Always set this or webpack will traverse all files in base directory.
       // can use 'exclude' also.
+      include: PATHS.app
+    },
+    {
+      test: /\.jsx?$/,
+      loaders: ['babel'],
       include: PATHS.app
     }
     ]
