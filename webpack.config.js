@@ -25,7 +25,23 @@ const common = {
     new htmlWebpackPlugin({
       title: 'Kanban app'
     })
-  ]
+  ],
+  module: {
+    loaders: [
+    {
+      //Test expects a RegExp! Note the slashes.
+      test: /\.css$/,
+      //loaders are invoked from right to left.
+      //css loader will resolve @import and url statements in css files
+      //then style-loader deals with require statements in our javascript
+      loaders: ['style', 'css'],
+      // Include accepts either a path or an array of paths.
+      // Always set this or webpack will traverse all files in base directory.
+      // can use 'exclude' also.
+      include: PATHS.app
+    }
+    ]
+  }
 };
 
 var webpack = require('webpack');
