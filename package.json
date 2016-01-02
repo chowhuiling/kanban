@@ -15,5 +15,19 @@
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0",
     "webpack-merge": "^0.7.0"
-  }
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^1.7.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chowhuiling/kanban.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chowhuiling/kanban/issues"
+  },
+  "homepage": "https://github.com/chowhuiling/kanban#readme"
 }
