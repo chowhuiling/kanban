@@ -14,6 +14,9 @@ const PATHS = {
 //using merge function
 var merge = require('webpack-merge');
 
+//set BABEL_ENV as npm lifecycle event to map the npm run xxx to babel env
+process.env.BABEL_ENV = TARGET;
+
 const common = {
   //entry accepts a path or an object of entries.
   entry: PATHS.app,
