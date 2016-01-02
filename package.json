@@ -6,12 +6,17 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js --ext .jsx"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-eslint": "^4.1.6",
     "css-loader": "^0.23.1",
+    "eslint": "^1.10.3",
+    "eslint-loader": "^1.1.1",
+    "eslint-plugin-react": "^3.13.1",
     "html-webpack-plugin": "^1.7.0",
     "jshint": "^2.8.0",
     "jshint-loader": "^0.8.3",
