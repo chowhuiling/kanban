@@ -27,6 +27,12 @@ const common = {
     })
   ],
   module: {
+    preloaders: [
+    {
+      test: /\.js?$/,
+      loaders: ['jshint'],
+      include: PATHS.app
+    }],
     loaders: [
     {
       //Test expects a RegExp! Note the slashes.
@@ -49,6 +55,7 @@ var webpack = require('webpack');
 // Default configuration
 if (TARGET === 'start' || !TARGET) {
   module.exports = merge(common, {
+    devtool: 'eval-source-map',
     devServer: {
       historyApiFallback: true,
       hot: true,
