@@ -4,6 +4,7 @@ import Notes from './Notes.jsx';
 import NoteActions from '../actions/NoteActions';
 import NoteStore from '../stores/NoteStore';
 import LaneActions from '../actions/LaneActions';
+import Editable from './Editable.jsx';
 
 export default class Lane extends React.Component {
   render() {
@@ -13,7 +14,11 @@ export default class Lane extends React.Component {
     return (
         <div {...props}>
           <div className="lane-header">
-            <div className="lane-name">{lane.name}</div>
+            <Editable className="lane-name" 
+                      value={lane.name}
+                      editing={lane.editing}
+                      onEdit={this.editName.bind(this,id)}
+                      onValueClick={this.activateLaneEdit.bind(this,id)} />
             <div className="lane-add-note">
               <button onClick={this.addNote.bind(this,id)}>+</button>
             </div>
@@ -23,10 +28,22 @@ export default class Lane extends React.Component {
                           notes: () => NoteStore.get(lane.notes)
                         }}
                         >
-            <Notes onEdit={this.editNote} onDelete={this.deleteNote.bind(this, id)} />
+            <Notes onValueClick={this.activateNoteEdit}
+                   onEdit={this.editNote} 
+                   onDelete={this.deleteNote.bind(this, id)} />
             </AltContainer>
           </div>
         );
+  }
+
+  editName(id, name) {
+    console.log('edited lane name', id, name);
+  }
+  activateLaneEdit(id) {
+    console.log('edit lane name', id);
+  }
+  activateNoteEdit(id) {
+    console.log('edit note task', id);
   }
 
   addNote(laneId) {
