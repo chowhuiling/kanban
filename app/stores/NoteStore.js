@@ -6,7 +6,7 @@ class NoteStore {
   constructor() {
     //use bindActions to map each action in NodeActions to a method by name.
     this.bindActions(NoteActions);
-    this.notes = [];
+    this.notes = [{id: uuid.v4(), task:'test'}];
   }
 
   create(note) {
@@ -32,7 +32,7 @@ class NoteStore {
   delete(noteId) {
     this.setState({
       notes: this.notes.filter((note) => note.id !== nodeId)
-
+    });
   }
 }
 

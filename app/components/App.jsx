@@ -1,28 +1,28 @@
 import React from 'react';
 import Notes from './Notes.jsx';
+import NoteActions from '../actions/NoteActions';
+import NoteStore from '../stores/NoteStore';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      notes: [
-      {
-        id: uuid.v4(),
-        task: 'Learn webpack'
-      },
-      {
-        id: uuid.v4(),
-        task: 'Learn react'
-      },
-      {
-        id: uuid.v4(),
-        task: 'go sleep'
-      }
-      ]
-    };
+    this.state = NoteStore.getState();
 
     //bind the "this" context to the function so "this" works in the function
     this.addNote = this.addNote.bind(this);
+  }
+
+  componentDidMount() {
+    NoteStore.listen(this.storeChanged);
+  }
+
+  componentWillUnmount() {
+    NoteStore.unlisten(this.storeChanged);
+  }
+  
+  storeChanged = (state) => {
+    //must initialize the state so that it points to the right context.
+    this.setState(state);
   }
 
   render() {
@@ -36,28 +36,16 @@ export default class App extends React.Component {
   }
   //addNote = () => { //uncomment this line and remove the binding event above to use the new syntax.
   addNote() {
-    this.setState({
-      notes: this.state.notes.concat([{
-               id: uuid.v4(),
-              task: 'New task'
-             }])
-    });
+    NoteActions.create({task: 'New task'});
+    
     console.log('add note');
   }
   editNote = (id, task) => {
-    const notes = this.state.notes.map((note) => {
-      if (note.id === id) {
-        note.task = task;
-      }
+    NoteActions.update({id, task});
 
-      return note;
-    });
-    this.setState({notes});
   }
   deleteNote = (id) => {
+    NoteActions.delete(id);
     console.log("deleting node:",id);
-    this.setState({
-      notes: this.state.notes.filter((note) => note.id !== id)
-    });
   }
 }
