@@ -8,8 +8,18 @@ class NoteStore {
     //use bindActions to map each action in NoteActions to a method by name.
     this.bindActions(NoteActions);
     this.notes = [{id: uuid.v4(), task:'test'}];
+
+    //Alt uses this to access the public interface of the store.
+    this.exportPublicMethods({
+      get: this.get.bind(this)
+    });
   }
 
+  get(ids) {
+    return (ids || []).map((id) => this.notes.filter((note) => note.id === id))
+      .filter((a) => a).map((a) => a[0]);
+    //TODO: figure out what the 2nd filter and map does
+  }
   create(note) {
     const notes = this.notes;
     note.id = uuid.v4();
@@ -17,6 +27,7 @@ class NoteStore {
     this.setState({
       notes: notes.concat(note)
     });
+    return note;
   }
 
   update(updatedNote) {
