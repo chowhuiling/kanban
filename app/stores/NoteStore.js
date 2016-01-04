@@ -7,7 +7,7 @@ class NoteStore {
   constructor() {
     //use bindActions to map each action in NoteActions to a method by name.
     this.bindActions(NoteActions);
-    this.notes = [{id: uuid.v4(), task:'test'}];
+    this.notes = [];
 
     //Alt uses this to access the public interface of the store.
     this.exportPublicMethods({
