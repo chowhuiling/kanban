@@ -40,6 +40,7 @@ class LaneStore {
 
   attachToLane({laneId, noteId}) {
     if (!noteId) {
+      //waitFor tells the dispatcher to wait before going on. (for async data dependency)
       this.waitFor(NoteStore);
       noteId = NoteStore.getState().notes.slice(-1)[0].id;
     }
