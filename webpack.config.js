@@ -91,7 +91,22 @@ if (TARGET === 'start' || !TARGET) {
 }
 
 if (TARGET === 'build') {
-  module.exports = merge(common, {});
+  module.exports = merge(common, {
+    plugins: [
+      //setting DefinePlugin affects React library size!
+      //webpack will perform string replacement 'as-is'. instead of using JSON.stringify, an alternative
+      //is to set it to: '"production"'.
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
+          //you can set it to 'development' for your dev target to force NODE_ENV to dev mode no matter what.
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        conpress: {
+          warnings: false
+        }
+      })
+    ]     
+  });
 }
 
 
