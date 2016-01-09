@@ -4,4 +4,5 @@ export default alt.generateActions('create',
                                    'update',
                                    'delete',
                                    'attachToLane',
-                                   'detachFromLane');
+                                   'detachFromLane',
+                                   'move');

@@ -1,60 +1,43 @@
 import React from 'react';
+import {DragSource, DropTarget} from 'react-dnd';
+import ItemTypes from '../constants/itemTypes';
 
-export default class Note extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      editing: false
+const noteSource = {
+  //beginDrag handler. set the initial state for dragging here.
+  beginDrag(props) {
+    return {
+      id: props.id
     };
   }
+};
+const noteTarget = {
+  hover(targetProps, monitor) {
+    const targetId = targetProps.id;
+    const sourceProps = monitor.getItem();
+    const sourceId = sourceProps.id;
+
+    if (sourceId !== targetId) {
+       targetProps.onMove({sourceId, targetId});
+    }
+  }
+};
+
+
+@DragSource(ItemTypes.NOTE, noteSource, (connect) => ({
+  connectDragSource: connect.dragSource()
+}))
+@DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
+  connectDropTarget: connect.dropTarget()
+}))
+//use Note as a wrapper component for Editable..
+export default class Note extends React.Component {
   render() {
-    if (this.state.editing) {
-      return this.renderEdit();
-    }
-    return this.renderNote();
+    const {connectDragSource, connectDropTarget, id, onMove, ...props} = this.props;
+
+    return connectDragSource(connectDropTarget(
+      <li {...this.props}>{this.props.children}</li>
+    ));
   }
 
-  renderEdit = () => {
-    return <input type="text" 
-      autoFocus={true} 
-      defaultValue={this.props.task}
-      onBlur={this.finishEdit}
-      onKeyPress={this.checkEnter} />;
-  }
-
-  renderNote = () => {
-    const onDelete = this.props.onDelete;
-    return (
-       <div onClick={this.edit}>
-          <span className="task">{this.props.task}</span>
-          {onDelete ? this.renderDelete() : null }
-       </div>
-       );
-  }
-  renderDelete = () => {
-    return <button className="delete" onClick={this.props.onDelete}>x</button>;
-  }
-
-  edit = () => {
-    this.setState({
-      editing: true
-    });
-  }
-
-  checkEnter = (e) => {
-    if (e.key === 'Enter') {
-      this.finishEdit(e);
-    }
-  }
-  finishEdit = (e) => {
-    if (this.props.onEdit) {
-      this.props.onEdit(e.target.value);
-    }
-
-    this.setState({
-      editing: false
-    });
-  }
 }
 
