@@ -5,13 +5,34 @@ import NoteActions from '../actions/NoteActions';
 import NoteStore from '../stores/NoteStore';
 import LaneActions from '../actions/LaneActions';
 import Editable from './Editable.jsx';
+import {DropTarget} from 'react-dnd';
+import ItemTypes from '../constants/itemTypes';
 
+const noteTarget = {
+  hover(targetProps, monitor) {
+    const targetId = targetProps.lane.id;
+    const sourceProps = monitor.getItem();
+    const sourceId = sourceProps.id;
+
+    //check that lane is empty, else this method shld not be triggered.
+    if (!targetProps.lane.notes.length) {
+      LaneActions.attachToLane({
+        laneId: targetId,
+        noteId: sourceId
+      });
+    }
+  }
+};
+
+@DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
+  connectDropTarget: connect.dropTarget()
+}))
 export default class Lane extends React.Component {
   render() {
-    const {lane, ...props} = this.props;
+    const {connectDropTarget, lane, ...props} = this.props;
     const id = lane.id;
 
-    return (
+    return connectDropTarget(
         <div {...props}>
           <div className="lane-header">
             <Editable className="lane-name" 
