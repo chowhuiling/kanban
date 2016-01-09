@@ -13,9 +13,7 @@ export default ({notes, onValueClick, onEdit, onDelete}) => {
       <ul className="notes">{notes.map((note) => {
         return (
           <Note className="note" key={note.id} id={note.id}
-            onMove={({sourceId, targetId}) => 
-
-              console.log('source', sourceId, 'target', targetId)}
+            onMove={LaneActions.move} 
           >
 
             <Editable value={note.task} 

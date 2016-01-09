@@ -8,6 +8,11 @@ const noteSource = {
     return {
       id: props.id
     };
+  },
+  //perform custom check so that the "isDragging" prop remains when the node is unmounted.
+  //node is unmounted when the item is dragged into another lane.
+  isDragging(props, monitor) {
+    return props.id === monitor.getItem().id;
   }
 };
 const noteTarget = {
@@ -17,14 +22,15 @@ const noteTarget = {
     const sourceId = sourceProps.id;
 
     if (sourceId !== targetId) {
-       targetProps.onMove({sourceId, targetId});
+       targetProps.onMove({sourceNoteId: sourceId, targetNoteId: targetId});
     }
   }
 };
 
 
-@DragSource(ItemTypes.NOTE, noteSource, (connect) => ({
-  connectDragSource: connect.dragSource()
+@DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging() //map isDragging() state to isDragging prop
 }))
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
@@ -32,10 +38,12 @@ const noteTarget = {
 //use Note as a wrapper component for Editable..
 export default class Note extends React.Component {
   render() {
-    const {connectDragSource, connectDropTarget, id, onMove, ...props} = this.props;
+    const {connectDragSource, connectDropTarget, isDragging, id, onMove, ...props} = this.props;
 
     return connectDragSource(connectDropTarget(
-      <li {...this.props}>{this.props.children}</li>
+      <li style={{
+        opacity: isDragging ? 0.3 : 1
+      }} {...this.props}>{this.props.children}</li>
     ));
   }
 

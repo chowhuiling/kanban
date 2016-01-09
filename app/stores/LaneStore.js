@@ -3,6 +3,7 @@ import assign from 'object-assign';
 import alt from '../libs/alt';
 import LaneActions from '../actions/LaneActions';
 import NoteStore from './NoteStore';
+import update from 'react-addons-update';
 
 class LaneStore {
   constructor() {
@@ -65,6 +66,38 @@ class LaneStore {
       }
       return lane;
     });
+    this.setState({lanes});
+  }
+
+  move({sourceNoteId, targetNoteId}) {
+    const lanes = this.lanes;
+    const sourceLane = lanes.filter((lane) => {
+      return lane.notes.indexOf(sourceNoteId) >= 0;
+    })[0];
+    const targetLane = lanes.filter((lane) => {
+      return lane.notes.indexOf(targetNoteId) >= 0;
+    })[0];
+    const sourceNoteIndex = sourceLane.notes.indexOf(sourceNoteId);
+    const targetNoteIndex = targetLane.notes.indexOf(targetNoteId);
+
+    if (sourceLane === targetLane) {
+      //move at once to avoid complications
+      sourceLane.notes = update(sourceLane.notes, {
+        $splice: [
+          [sourceNoteIndex, 1],
+          [targetNoteIndex, 0, sourceNoteId]
+        ]
+      });
+    }
+   
+    else {
+      //get rid of source
+      sourceLane.notes.splice(sourceNoteIndex, 1);
+
+      //and move it to target
+      targetLane.notes.splice(targetNoteIndex, 0, sourceNoteId);
+    }
+    
     this.setState({lanes});
   }
 }
